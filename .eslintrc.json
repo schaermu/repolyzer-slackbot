@@ -1,0 +1,14 @@
+{
+    "parser": "babel-eslint",
+    "plugins": ["node"],
+    "extends": ["eslint:recommended", "plugin:node/recommended"],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "rules": {
+        "node/exports-style": ["error", "module.exports"]
+    }
+}

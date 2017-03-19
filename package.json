@@ -1,0 +1,28 @@
+{
+  "name": "repolyzer-slackbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js | bunyan",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "dependencies": {
+    "botkit": "^0.5.2",
+    "botkit-storage-mongo": "^1.0.4",
+    "bunyan": "^1.8.8",
+    "dotenv": "^4.0.0",
+    "mongodb": "^2.2.25"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.18.0",
+    "eslint-plugin-node": "^4.2.1"
+  }
+}
