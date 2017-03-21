@@ -39,17 +39,21 @@ bot.controller.hears('github.com/(.*)/(.*)>', 'ambient', (bot, msg) => {
         const repo = res.data
         // fetch more information for repo relevant to scoring
         github.loadAdditionalData(repo)
-            .then(([issues]) => {
+            .then(([issues, commits]) => {
+                log.debug(commits.data)
                 const score = github.calculateScore({
                     stars: repo.stargazers_count,
                     watchers: repo.watchers_count,
                     hasWiki: repo.has_wiki,
                     isForm: repo.fork,
                     openIssues: repo.open_issues_count,
-                    issues: issues.data
+                    issues: issues.data,
+                    commits: commits.data.map(c => {
+                        return c.commit
+                    })
                 })
 
-                bot.reply(msg, `I'm done doing calculations for ${user}/${repoName}! My final score is ${score}/100 points.`)
+                bot.reply(msg, `I'm done doing calculations for ${user}/${repoName}! My final score is ${score} points.`)
             }).catch(err => {
                 log.error(`Error while fetching additional repository data: ${err}`)  
             });
