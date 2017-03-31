@@ -40,8 +40,7 @@ bot.controller.hears('github.com/(.*)/(.*)>', 'ambient', (bot, msg) => {
         // fetch more information for repo relevant to scoring
         github.loadAdditionalData(repo)
             .then(([issues, commits]) => {
-                log.debug(commits.data)
-                const score = github.calculateScore({
+                const scoreRes = github.calculateScore({
                     stars: repo.stargazers_count,
                     watchers: repo.watchers_count,
                     hasWiki: repo.has_wiki,
@@ -53,7 +52,39 @@ bot.controller.hears('github.com/(.*)/(.*)>', 'ambient', (bot, msg) => {
                     })
                 })
 
-                bot.reply(msg, `I'm done doing calculations for ${user}/${repoName}! My final score is ${score} points.`)
+                let color = 'good',
+                    icon = ':+1::skin-tone-2:'
+                if (scoreRes.score < 8) {
+                    color = 'warning'
+                    icon = ':warning:'
+                }
+
+                if (scoreRes.score < 4) {
+                    color = 'danger'
+                    icon = ':exclamation:'
+                }
+
+                const responseMsg = {
+                    text: `I'm done with my analysis of \`${user}/${repoName}\`. The final score is *${scoreRes.score}/10.00* points!`,
+                    icon_emoji: icon
+                };
+                
+                if (scoreRes.penalties.length > 0) {
+                    const reasons = scoreRes.penalties.reduce((output, penalty) => {
+                        return `${output}\n*-${penalty.amount}* _${penalty.reason}_`
+                    }, '')
+
+                    responseMsg.attachments = [
+                        {
+                            pretext: 'The following reasons lead to deductions:',
+                            mrkdwn_in: ['text'],
+                            color: color,
+                            text: reasons
+                        }
+                    ]
+                }
+
+                bot.reply(msg, responseMsg)
             }).catch(err => {
                 log.error(`Error while fetching additional repository data: ${err}`)  
             });
