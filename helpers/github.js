@@ -52,14 +52,16 @@ class GitHubApi {
     loadAdditionalData(repo, cb) {
         const keys = [
             `${repo.owner.login}_${repo.name}_issues`,
-            `${repo.owner.login}_${repo.name}_commits`
+            `${repo.owner.login}_${repo.name}_commits`,
+            `${repo.owner.login}_${repo.name}_contributors`,
         ]
 
         this.cache.mget(keys, (err, cacheRes) => {
             if (cacheRes.every(res => res !== null)) {
                 cb(null, {
                     issues: JSON.parse(cacheRes[0]),
-                    commits: JSON.parse(cacheRes[1])
+                    commits: JSON.parse(cacheRes[1]),
+                    contributors: JSON.parse(cacheRes[2])
                 })
             } else {
                 Promise.all([
@@ -70,18 +72,25 @@ class GitHubApi {
                         state: 'all',
                         per_page: 100
                     }),
-
                     this.client.repos.getCommits({
                         owner: repo.owner.login,
                         repo: repo.name,
                         per_page: 100
+                    }),
+                    this.client.repos.getContributors({
+                        owner: repo.owner.login,
+                        repo: repo.name,
+                        anon: true
                     })
-                ]).then(([issues, commits]) => {
+                ]).then(([issues, commits, contributors]) => {
                     this.cache.setex(`${repo.owner.login}_${repo.name}_issues`, 3600, JSON.stringify(issues.data))
                     this.cache.setex(`${repo.owner.login}_${repo.name}_commits`, 3600, JSON.stringify(commits.data))
+                    this.cache.setex(`${repo.owner.login}_${repo.name}_contributors`, 3600, JSON.stringify(contributors.data))
+                    
                     cb(null, {
                         issues: issues.data,
-                        commits: commits.data
+                        commits: commits.data,
+                        contributors: contributors.data
                     })
                 }).catch(err => {
                     cb(err)

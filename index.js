@@ -50,6 +50,7 @@ bot.controller.hears('github.com/(.*)/(.*)>', 'ambient', (bot, msg) => {
                         hasWiki: repo.has_wiki,
                         isForm: repo.fork,
                         openIssues: repo.open_issues_count,
+                        contributors: result.contributors,
                         issues: result.issues,
                         commits: result.commits.map(c => {
                             return c.commit

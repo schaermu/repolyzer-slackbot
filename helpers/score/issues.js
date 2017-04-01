@@ -1,4 +1,5 @@
 const OPEN_CLOSED_ISSUE_RATIO = 70 // 70%
+const MAX_PENALTY = 1
 
 module.exports = (score, penalties, data, log) => {
     // if the repo has had an open/closed ratio below OPEN_CLOSED_RATIO percent, we subtract 1 point.
@@ -12,7 +13,7 @@ module.exports = (score, penalties, data, log) => {
             return stats
         }, { open: 0, closed: 0 });
 
-    const current = (issueStats.closed / issueStats.open) * 100 > OPEN_CLOSED_ISSUE_RATIO ? 0 : 1
+    const current = (issueStats.closed / issueStats.open) * 100 > OPEN_CLOSED_ISSUE_RATIO ? 0 : MAX_PENALTY
     if (current > 0) {
         score -= current
         penalties.push({

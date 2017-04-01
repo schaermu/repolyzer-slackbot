@@ -1,7 +1,8 @@
 const stars = require('./score/stars'),
     issues = require('./score/issues'),
     openIssues = require('./score/open-issues'),
-    commitActivity = require('./score/commit-activity')
+    commitActivity = require('./score/commit-activity'),
+    contributors = require('./score/contributors')
 
 class Scorer {
     constructor(log) {
@@ -10,7 +11,8 @@ class Scorer {
             stars,
             issues,
             openIssues,
-            commitActivity
+            commitActivity,
+            contributors,
         ]
     }
 
