@@ -11,28 +11,28 @@
             "stars": {
                 "maxPenalty": 3,
                 "minStars": 1200,
-                "help": "Repositories with less than ${minStars} get an increasing penalty, up to -${maxPenalty} points."
+                "help": "Repositories with less than {{minStars}} stars get an increasing penalty, up to -{{maxPenalty}} points."
             },
             "open-issues": {
                 "maxPenalty": 2,
                 "openIssueStarsRatio": "200", // 1:200
                 "maxOpenIssues": "500",
-                "help": "If the ratio of open issues (capped at ${maxOpenIssues} to stars is below 1:${openIssueRatio}, a penalty of up to -${maxPenalty} is applied."
+                "help": "If the ratio of open issues (capped at {{maxOpenIssues}}) to stars is below 1:{{openIssueStarsRatio}}, a penalty of up to -{{maxPenalty}} is applied."
             },
             "issues": {
                 "maxPenalty": 1,
                 "openClosedIssueQuota": "70", // 70%
-                "help": "If the last 100 issues have an open/closed ratio below ${openClosedIssueQuota}, a flat penalty of -${maxPenalty} is issued."
+                "help": "If the last 100 issues have an open/closed ratio below {{openClosedIssueQuota}}%, a flat penalty of -{{maxPenalty}} is issued."
             },
             "commit-activity": {
                 "maxPenalty": 2,
                 "monthlyPenalty": 0.25,
-                "help": "For each month without any commits, a penalty of -${monthlyPenalty} is applied (up to -${maxPenalty})."
+                "help": "For each month without any commits, a penalty of -{{monthlyPenalty}} is applied (up to -{{maxPenalty}})."
             },
             "contributors": {
                 "maxPenalty": 2,
                 "minContributors": 3,
-                "help": "At least ${minContributors} are required to prevent penalty, anything less leads to an increasing penalty (up to -${maxPenalty})."
+                "help": "At least {{minContributors}} contributors are required to prevent penalty, anything less leads to an increasing penalty (up to -{{maxPenalty}})."
             }
         }
     }

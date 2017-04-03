@@ -13,7 +13,6 @@ class GitHubApi {
             process.abort()
         }
 
-        this.scorer = new Scorer(log)
         this.cache = Redis.createClient();
         this.cache.on('error', (err) => {
             this.log.error(`Error while connecting to redis: ${err}`)
@@ -111,8 +110,9 @@ class GitHubApi {
             }
         }
 
-        this.scorer.init(data)
-        this.scorer.calculate()
+        const scorer = new Scorer(this.log)
+        scorer.init(data)
+        scorer.calculate()
 
         return {
             score: (this.scorer.score > 10 ? 10 : this.scorer.score).toFixed(2),

@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const SlackBot = require('./helpers/slack'),
     GitHubApi = require('./helpers/github'),
+    config = require('config'),
     BotkitStorage = require('botkit-storage-mongo'),
     bunyan = require('bunyan'),
     PrettyStream = require('bunyan-prettystream')
@@ -27,10 +28,60 @@ if (!process.env.SLACK_CLIENT_ID || !process.env.SLACK_CLIENT_SECRET || !process
 }
 
 const storage = BotkitStorage({ mongoUri: process.env.MONGODB_URI })
-const bot = new SlackBot(storage, log),
+const slackBot = new SlackBot(storage, log),
     github = new GitHubApi(log)
 
-bot.controller.hears('github.com/(.*)/(.*)>', 'ambient', (bot, msg) => {
+// pre-compile help list
+const activeScoreModules = config.get('Scorer.modules'),
+    activeModuleConfig = config.get('Scorer.config');
+let helpMessages = []
+activeScoreModules.forEach(item => {
+    // get config
+    const currCfg = activeModuleConfig[item]
+
+    // get all config properties
+    let currHelp = currCfg.help
+    for (let prop in currCfg) {
+        if (prop === 'help')
+            continue
+        
+        // replace current help message
+        let val = currCfg[prop];
+        if (!isNaN(val, 10) && val < 10) {
+            val = parseFloat(val).toFixed(2);
+        }
+
+        currHelp = currHelp.replace(new RegExp(`{{${prop}}}`, 'gi'), val)
+    }
+
+    helpMessages.push({
+        module: item,
+        message: currHelp
+    })
+})
+
+slackBot.controller.hears(['.*help.*', '.*score.*', '.*how.*'], 'direct_mention,mention', (bot, msg) => {
+    // show help for all activated modules
+    const mainMessage = 'It seems like you asked for help, here you go! I\'m you\'re friendly bot from the hood to analyze GitHub repositories based on a certain set of criteria (listed below).'
+    const helpList = helpMessages.reduce((out, help) => {
+        return `${out}\n*${help.module}*:\n_${help.message}_`
+    }, '')
+
+    const response = {
+        text: mainMessage,
+        attachments: [{
+            pretext: 'These modules are currently active:',            
+            color: 'good',
+            mrkdwn_in: ['text'],
+            text: helpList,
+            footer: 'NOTE: My rating should be used as a discussion basis when introducing a new 3rd-party library, not as the single source of truth.'
+        }]
+    }
+
+    bot.reply(msg, response)
+})
+
+slackBot.controller.hears('github.com/(.*)/(.*)>', 'ambient', (bot, msg) => {
     const user = msg.match[1], repoName = msg.match[2]
     log.debug(`Found github.com link, starting to fetch information for ${user}/${repoName}`)
 
