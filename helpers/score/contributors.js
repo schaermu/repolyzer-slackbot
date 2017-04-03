@@ -4,7 +4,7 @@ const MAX_PENALTY = 2;
 module.exports = (score, penalties, data, log) => {
     const contribCount = data.contributors.length
     const current = contribCount >= MIN_CONTRIBUTORS ? 0 
-        : ((100 / MIN_CONTRIBUTORS * contribCount) * (MAX_PENALTY / 100)).toFixed(2)
+        : (MAX_PENALTY - ((100 / MIN_CONTRIBUTORS * contribCount) * (MAX_PENALTY / 100))).toFixed(2)
     if (current > 0) {
         score -= current
         penalties.push({
