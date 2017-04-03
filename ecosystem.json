@@ -1,0 +1,35 @@
+{
+  "apps" : [
+    {
+      "name"      : "repolyzer-slackbot-" + process.env.NODE_ENV,
+      "script"    : "./index.js",
+      "env_production" : {
+        "NODE_ENV": "production"
+      },
+      "env_dev" : {
+        "NODE_ENV": "development"
+      }
+    }
+  ],
+  "deploy" : {
+    "production" : {
+      "user" : "schaermu",
+      "host" : "46.101.129.108",
+      "ref"  : "origin/master",
+      "repo" : "https://github.com/schaermu/repolyzer-slackbot.git",
+      "path" : "/home/schaermu/apps/repolyzer-slackbot/production",
+      "post-deploy" : "npm install --only=prod && NODE_ENV=production PM2_HOME=/opt/.pm2 pm2 startOrRestart ecosystem.json --env production"
+    },
+    "dev" : {
+      "user" : "schaermu",
+      "host" : "46.101.129.108",
+      "ref"  : "origin/develop",
+      "repo" : "https://github.com/schaermu/repolyzer-slackbot.git",
+      "path" : "/home/schaermu/apps/repolyzer-slackbot/development",
+      "post-deploy" : "npm install --only=prod && NODE_ENV=development PM2_HOME=/opt/.pm2 pm2 startOrRestart ecosystem.json --env dev",
+      "env"  : {
+        "NODE_ENV": "dev"
+      }
+    }
+  }
+}
