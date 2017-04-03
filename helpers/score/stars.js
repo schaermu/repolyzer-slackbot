@@ -6,14 +6,14 @@ module.exports = (score, penalties, data, log) => {
     const MAX_PENALTY = cfg.maxPenalty
 
     // calculations based on stars (repos < 1200 stars get penalties)
-    const starRel = ((data.stars / MIN_STARS) * MAX_PENALTY).toFixed(2),
+    const starRel = (data.stars / MIN_STARS) * MAX_PENALTY,
         starRelVal = starRel < MAX_PENALTY ? starRel : MAX_PENALTY
     const current = Math.abs(starRelVal - MAX_PENALTY);
     if (current > 0) {
         score -= current
         penalties.push({
             reason: `Less than 1'200 stars (*${data.stars}* stars)`,
-            amount: current
+            amount: current.toFixed(2)
         });
     }
     log.debug(`Score is ${score} after star calculation.`)

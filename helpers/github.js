@@ -78,8 +78,7 @@ class GitHubApi {
                     }),
                     this.client.repos.getContributors({
                         owner: repo.owner.login,
-                        repo: repo.name,
-                        anon: true
+                        repo: repo.name
                     })
                 ]).then(([issues, commits, contributors]) => {
                     this.cache.setex(`${repo.owner.login}_${repo.name}_issues`, 3600, JSON.stringify(issues.data))

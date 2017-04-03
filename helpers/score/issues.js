@@ -17,12 +17,12 @@ module.exports = (score, penalties, data, log) => {
         }, { open: 0, closed: 0 });
 
     const current = (issueStats.closed / issueStats.open) * 100 > OPEN_CLOSED_ISSUE_RATIO ? 0 : MAX_PENALTY
-    if (current > 0) {
+    if (!isNaN(issueStats.closed / issueStats.open) && current > 0) {
         score -= current
         penalties.push({
             reason: `Closed-Open Ratio on issues is below \
 ${OPEN_CLOSED_ISSUE_RATIO}% (*${(issueStats.closed / issueStats.open) * 100}%*)`,
-            amount: current
+            amount: current.toFixed(2)
         })
     }
     log.debug(`Score is ${score} after open/closed ratio calculation.`)
