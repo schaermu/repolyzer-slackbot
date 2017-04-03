@@ -1,7 +1,10 @@
-const MIN_CONTRIBUTORS = 3; // how many contributors are needed to prevent penalty?
-const MAX_PENALTY = 2;
+const config = require('config')
 
 module.exports = (score, penalties, data, log) => {
+    const cfg = config.get('Scorer.config.contributors')
+    const MIN_CONTRIBUTORS = cfg.minContributors
+    const MAX_PENALTY = cfg.maxPenalty
+
     const contribCount = data.contributors.length
     const current = contribCount >= MIN_CONTRIBUTORS ? 0 
         : (MAX_PENALTY - ((100 / MIN_CONTRIBUTORS * contribCount) * (MAX_PENALTY / 100))).toFixed(2)

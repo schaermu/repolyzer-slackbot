@@ -1,7 +1,10 @@
-const OPEN_CLOSED_ISSUE_RATIO = 70 // 70%
-const MAX_PENALTY = 1
+const config = require('config')
 
 module.exports = (score, penalties, data, log) => {
+    const cfg = config.get('Scorer.config.issues')
+    const OPEN_CLOSED_ISSUE_RATIO = cfg.openClosedIssueQuota
+    const MAX_PENALTY = cfg.maxPenalty
+
     // if the repo has had an open/closed ratio below OPEN_CLOSED_RATIO percent, we subtract 1 point.
     const issueStats = data.issues
         .reduce((stats, val) => {
