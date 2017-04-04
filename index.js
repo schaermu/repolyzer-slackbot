@@ -81,7 +81,7 @@ slackBot.controller.hears(['.*help.*', '.*score.*', '.*how.*'], 'direct_mention,
     bot.reply(msg, response)
 })
 
-slackBot.controller.hears('github.com/(.*)/(.*)>', 'ambient', (bot, msg) => {
+slackBot.controller.hears('github\.com\/([^\/]+)\/([^\/]+)', 'ambient', (bot, msg) => {
     const user = msg.match[1], repoName = msg.match[2]
     log.debug(`Found github.com link, starting to fetch information for ${user}/${repoName}`)
 
