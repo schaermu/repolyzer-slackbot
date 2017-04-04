@@ -105,7 +105,8 @@ slackBot.controller.hears('github.com/(.*)/(.*)>', 'ambient', (bot, msg) => {
                         issues: result.issues,
                         commits: result.commits.map(c => {
                             return c.commit
-                        })
+                        }),
+                        license: repo.license
                     })
 
                     let color = 'good',
