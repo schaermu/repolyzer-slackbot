@@ -47,7 +47,7 @@ activeScoreModules.forEach(item => {
         
         // replace current help message
         let val = currCfg[prop];
-        if (!isNaN(val, 10) && val < 10) {
+        if (prop === 'maxPenalty') {
             val = parseFloat(val).toFixed(2);
         }
 
