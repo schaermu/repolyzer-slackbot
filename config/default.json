@@ -5,7 +5,8 @@
             "open-issues",
             "issues",
             "commit-activity",
-            "contributors"
+            "contributors",
+            "license"
         ],
         "config": {
             "stars": {
@@ -33,6 +34,10 @@
                 "maxPenalty": 2,
                 "minContributors": 3,
                 "help": "At least {{minContributors}} contributors are required to prevent penalty, anything less leads to an increasing penalty (up to -{{maxPenalty}})."
+            },
+            "license": {
+                "maxPenalty": 3,
+                "help": "The licensing model must be an OSI-approved license listed on spdx.org. Failing this check applys a penalty of -{{maxPenalty}}."
             }
         }
     }

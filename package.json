@@ -23,7 +23,8 @@
     "github": "^9.2.0",
     "moment": "^2.18.0",
     "mongodb": "^2.2.25",
-    "redis": "^2.7.1"
+    "redis": "^2.7.1",
+    "spdx-license-list": "^3.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

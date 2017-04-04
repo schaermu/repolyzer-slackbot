@@ -114,7 +114,7 @@ class GitHubApi {
         scorer.calculate()
 
         return {
-            score: (scorer.score > 10 ? 10 : scorer.score).toFixed(2),
+            score: (scorer.score > 10 ? 10 : scorer.score < 0 ? 0 : scorer.score).toFixed(2),
             penalties: scorer.penalties
         }
     }
