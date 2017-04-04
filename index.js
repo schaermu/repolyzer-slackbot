@@ -106,7 +106,8 @@ slackBot.controller.hears('github\.com\/([^\/]+)\/([^\/]+)', 'ambient', (bot, ms
                         commits: result.commits.map(c => {
                             return c.commit
                         }),
-                        license: repo.license
+                        license: repo.license,
+                        readme: result.readme
                     })
 
                     let color = 'good',

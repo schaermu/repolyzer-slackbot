@@ -34,6 +34,6 @@ module.exports = (score, penalties, data, log) => {
             amount: current.toFixed(2)
         });
     }
-    log.debug(`Score is ${score} after star calculation.`)
+    log.debug(`Score is ${score} after license calculation.`)
     return score
 }
