@@ -11,8 +11,13 @@ module.exports = (score, penalties, data, log) => {
     const current = Math.abs(starRelVal - MAX_PENALTY);
     if (current > 0) {
         score -= current
+
+        // regex from http://stackoverflow.com/a/25377176/221217
+        const minStarsFmt = MIN_STARS.toString()
+            .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1'")
+        
         penalties.push({
-            reason: `Less than 1'200 stars (*${data.stars}* stars)`,
+            reason: `Less than ${minStarsFmt} stars (*${data.stars}* stars)`,
             amount: current.toFixed(2)
         });
     }
