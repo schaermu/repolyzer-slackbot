@@ -21,7 +21,7 @@ module.exports = (score, penalties, data, log) => {
         score -= current
         penalties.push({
             reason: `Closed-Open Ratio on issues is below \
-${OPEN_CLOSED_ISSUE_RATIO}% (*${(issueStats.closed / issueStats.open) * 100}%*)`,
+${OPEN_CLOSED_ISSUE_RATIO}% (*${((issueStats.closed / issueStats.open) * 100).toFixed(2)}%*)`,
             amount: current.toFixed(2)
         })
     }
