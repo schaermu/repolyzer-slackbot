@@ -6,7 +6,8 @@
             "issues",
             "commit-activity",
             "contributors",
-            "license"
+            "license",
+            "readme"
         ],
         "config": {
             "stars": {
@@ -38,6 +39,10 @@
             "license": {
                 "maxPenalty": 3,
                 "help": "The licensing model must be an OSI-approved license listed on spdx.org. Failing this check applys a penalty of -{{maxPenalty}}."
+            },
+            "readme": {
+                "maxPenalty": 3,
+                "help": "The repository must have a README. Failing this check applys a penalty of -{{maxPenalty}}."
             }
         }
     }

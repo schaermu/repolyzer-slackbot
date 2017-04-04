@@ -53,6 +53,7 @@ class GitHubApi {
             `${repo.owner.login}_${repo.name}_issues`,
             `${repo.owner.login}_${repo.name}_commits`,
             `${repo.owner.login}_${repo.name}_contributors`,
+            `${repo.owner.login}_${repo.name}_readme`
         ]
 
         this.cache.mget(keys, (err, cacheRes) => {
@@ -60,7 +61,8 @@ class GitHubApi {
                 cb(null, {
                     issues: JSON.parse(cacheRes[0]),
                     commits: JSON.parse(cacheRes[1]),
-                    contributors: JSON.parse(cacheRes[2])
+                    contributors: JSON.parse(cacheRes[2]),
+                    readme: JSON.parse(cacheRes[3])
                 })
             } else {
                 Promise.all([
@@ -79,19 +81,32 @@ class GitHubApi {
                     this.client.repos.getContributors({
                         owner: repo.owner.login,
                         repo: repo.name
+                    }),
+                    this.client.repos.getReadme({
+                        owner: repo.owner.login,
+                        repo: repo.name
                     })
-                ]).then(([issues, commits, contributors]) => {
-                    this.cache.setex(`${repo.owner.login}_${repo.name}_issues`, 3600, JSON.stringify(issues.data))
-                    this.cache.setex(`${repo.owner.login}_${repo.name}_commits`, 3600, JSON.stringify(commits.data))
-                    this.cache.setex(`${repo.owner.login}_${repo.name}_contributors`, 3600, JSON.stringify(contributors.data))
-                    
+                ].map(p => p.catch(e => e)))
+                .then(([issues, commits, contributors, readme]) => {
+                    if (issues.data) {
+                        this.cache.setex(`${repo.owner.login}_${repo.name}_issues`, 3600, JSON.stringify(issues.data))
+                    }                    
+                    if (commits.data) {
+                        this.cache.setex(`${repo.owner.login}_${repo.name}_commits`, 3600, JSON.stringify(commits.data))
+                    }                    
+                    if (contributors.data) {
+                        this.cache.setex(`${repo.owner.login}_${repo.name}_contributors`, 3600, JSON.stringify(contributors.data))
+                    }                    
+                    if (readme.data) {
+                        this.cache.setex(`${repo.owner.login}_${repo.name}_readme`, 3600, JSON.stringify(readme.data))
+                    }
+
                     cb(null, {
-                        issues: issues.data,
-                        commits: commits.data,
-                        contributors: contributors.data
+                        issues: issues.status === 404 ? null : issues.data,
+                        commits: commits.status === 404 ? null : commits.data,
+                        contributors: contributors.status === 404 ? null : contributors.data,
+                        readme: readme.status === 404 ? null : readme.data
                     })
-                }).catch(err => {
-                    cb(err)
                 })
             }
         })
