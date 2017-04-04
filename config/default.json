@@ -10,15 +10,15 @@
         ],
         "config": {
             "stars": {
-                "maxPenalty": 3,
-                "minStars": 1200,
+                "maxPenalty": 2,
+                "minStars": 800,
                 "help": "Repositories with less than {{minStars}} stars get an increasing penalty, up to -{{maxPenalty}} points."
             },
             "open-issues": {
                 "maxPenalty": 2,
                 "openIssueStarsRatio": "200", // 1:200
                 "maxOpenIssues": "500",
-                "help": "If the ratio of open issues (capped at {{maxOpenIssues}}) to stars is below 1:{{openIssueStarsRatio}}, a penalty of up to -{{maxPenalty}} is applied."
+                "help": "If the ratio of open issues (capped at {{maxOpenIssues}}) to stars is below 1:{{openIssueStarsRatio}}, a penalty of -{{maxPenalty}} is applied."
             },
             "issues": {
                 "maxPenalty": 1,
@@ -27,7 +27,7 @@
             },
             "commit-activity": {
                 "maxPenalty": 2,
-                "monthlyPenalty": 0.25,
+                "monthlyPenalty": 0.5,
                 "help": "For each month without any commits, a penalty of -{{monthlyPenalty}} is applied (up to -{{maxPenalty}})."
             },
             "contributors": {
