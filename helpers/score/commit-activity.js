@@ -14,7 +14,7 @@ module.exports = (score, penalties, data, log) => {
     if (current > 0) {
         score -= current
         penalties.push({
-            reason: `The last commit was *${monthDiff} months* ago`,
+            reason: `The last commit was *${monthDiff} ${monthDiff > 1 ? 'months' : 'month'}* ago`,
             amount: current.toFixed(2)
         })
     }
